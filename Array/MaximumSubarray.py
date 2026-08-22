@@ -6,39 +6,100 @@ Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
 Output: 6
 Explanation: The subarray [4,-1,2,1] has the largest sum 6. '''
 
-# Solution 1: Complexity: O(n)
-
 from typing import List
 
-class Solution:
-    def maxSubArray(self, nums: List[int]) -> int:
-        maxSum = float('-inf')
-        currentSum = 0
-        
-        for num in nums:
-            currentSum += num
-            
-            if currentSum > maxSum:
-                maxSum = currentSum
-            
-            if currentSum < 0:
-                currentSum = 0
-        
-        return maxSum
-
-# Solution 2: Complexity: O(n)
+# Solution 1: (Brute Force Approach) Complexity: O(n^3)
 
 class Solution:
+    # Function to find maximum sum of subarrays
+    def maxSubArray(self, nums: list[int]) -> int:
+        
+        """ Initialize maximum sum with the smallest possible integer"""
+        maxi = float('-inf')
+
+        # Iterate over each starting index of subarrays
+        for i in range(len(nums)):
+            
+            """ Iterate over each ending index of subarrays starting from i"""
+            for j in range(i, len(nums)):
+                
+                """ Variable to store the sum of the current subarray"""
+                sum = 0
+
+                # Calculate the sum of subarray nums[i...j]
+                for k in range(i, j + 1):
+                    sum += nums[k]
+
+                """ Update maxi with the maximum of itscurrent value and the sum of the current subarray"""
+                maxi = max(maxi, sum)
+
+        # Return the maximum subarray sum found
+        return maxi
+
+# Solution 2: (Better Approach) Complexity: O(n^2)
+
+class Solution:
+    # Function to find maximum sum of subarrays
     def maxSubArray(self, nums: List[int]) -> int:
-        maxSum = nums[0]
-        currentSum = nums[0]
+        
+        """ Initialize maximum sum with the smallest possible integer"""
+        maxi = float('-inf')
 
-        for num in nums[1:]:
-            currentSum = max(num, currentSum + num)
-            maxSum = max(maxSum, currentSum)
+        # Iterate over each starting index of subarrays
+        for i in range(len(nums)):
+            
+            """ Variable to store the sum of the current subarray"""
+            sum = 0
+            
+            """ Iterate over each ending index of subarrays starting from i"""
+            for j in range(i, len(nums)):
+                
+                """ Add the current element nums[j] to the sum i.e. sum of nums[i...j-1]"""
+                sum += nums[j]
 
-        return maxSum
+                """ Update maxi with the maximum of its current value and the sum of the current subarray"""
+                maxi = max(maxi, sum)
 
+        # Return the maximum subarray sum found
+        return maxi
+
+# Solution 3: (Optimal Approach) Complexity: O(n)
+
+class Solution:
+    # Function to find maximum sum of subarrays
+    def maxSubArray(self, nums: List[int]) -> int:
+        
+        # maximum sum
+        maxi = float('-inf') 
+        
+        # current sum of subarray
+        sum = 0 
+        
+        # Iterate through the array
+        for i in range(len(nums)):
+            
+            # Add current element to the sum
+            sum += nums[i] 
+            
+            # Update maxi if current sum is greater
+            if sum > maxi:
+                maxi = sum 
+            
+            # Reset sum to 0 if it becomes negative
+            if sum < 0:
+                sum = 0 
+        
+        # Return the maximum subarray sum found
+        return maxi
+
+# Main function to test the Solution class
 if __name__ == "__main__":
-    print(Solution().maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))  # 6
-    print(Solution().maxSubArray([-3, -1, -2]))  # -1
+    arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+
+    # Create an instance of Solution class
+    sol = Solution()
+
+    maxSum = sol.maxSubArray(arr)
+
+    # Print the max subarray sum
+    print(f"The maximum subarray sum is: {maxSum}")

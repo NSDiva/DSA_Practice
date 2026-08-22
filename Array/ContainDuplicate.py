@@ -7,52 +7,47 @@ Output: true
 Explanation:
 The element 1 occurs at the indices 0 and 3. '''
 
-# Solution 1: (Brute Force) Complexity: O(n^2)
+# Solution 1: (Brute Force Approach) Complexity: O(n^2)
 
-from typing import List
-
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        n = len(nums)
-        for i in range(n - 1):
-            for j in range(i + 1, n):
-                if nums[i] == nums[j]:
-                    return True
-        return False
-
-# Solution 2: (Sorting) Complexity: O(n log n)
-
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        nums.sort()
-        n = len(nums)
-        for i in range(1, n):
-            if nums[i] == nums[i - 1]:
+# Function to check for duplicates in array
+def containsDuplicate(nums):
+    # Loop through each element
+    for i in range(len(nums)):
+        # Compare with all future elements
+        for j in range(i + 1, len(nums)):
+            # If duplicate found
+            if nums[i] == nums[j]:
                 return True
-        return False
+    return False
 
-# Solution 3: (Hash Set) Complexity: O(n)
+# Solution 2: (Better Approach) Complexity: O(n log n)
 
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        seen = set()
-        for num in nums:
-            if num in seen:
-                return True
-            seen.add(num)
-        return False
+# Function to check for duplicates using sorting
+def containsDuplicate(nums):
+    # Sort the list to bring duplicates together
+    nums.sort()
 
-# Solution 4: (Hash Map) Complexity: O(n)
+    # Compare each element with its previous
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i - 1]:
+            return True  # Duplicate found
 
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        seen = {}
-        for num in nums:
-            if num in seen and seen[num] >= 1:
-                return True
-            seen[num] = seen.get(num, 0) + 1
-        return False
+    return False  # No duplicates
 
-if __name__ == "__main__":
-      print(Solution().containsDuplicate([1, 2, 3, 1]))  # True
-      print(Solution().containsDuplicate([1, 2, 3, 4]))  # False
+# Solution 3: (Optimal Approach) Complexity: O(n)
+
+# Function to check for duplicates using set
+def containsDuplicate(nums):
+    # Store unique elements in a set
+    unique = set(nums)
+
+    # If set has fewer elements, duplicates existed
+    return len(unique) < len(nums)
+
+
+# Sample input
+nums = [1, 2, 3, 1]
+
+# Call function and print result
+res = containsDuplicate(nums)
+print("true" if res else "false")

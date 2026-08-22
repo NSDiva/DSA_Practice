@@ -7,68 +7,59 @@ Example 1:
 Input: nums = [1,2,3,4]
 Output: [24,12,8,6] '''
 
-# Solution 1: (Brute Force) Complexity: O(n^2)
+# Solution 1: (Brute Force Approach) Complexity: O(n^2)
 
 class Solution:
-    def productExceptSelf(self, nums: list[int]) -> list[int]:
+    def productExceptSelf(self, nums):
         n = len(nums)
-        output = []
+        ans = [1] * n
         for i in range(n):
-            product = 1
             for j in range(n):
-                if i == j:
-                    continue
-                product *= nums[j]
-            output.append(product)
-        return output
-
-# Solution 2: (Prefix and Suffix Product) Complexity: O(n)
-
-class Solution:
-    def productExceptSelf(self, nums: list[int]) -> list[int]:
-        n = len(nums)
-        
-        pre = [0] * n
-        suff = [0] * n
-        pre[0] = 1
-        suff[n - 1] = 1
-        
-        # Calculate prefix products
-        for i in range(1, n):
-            pre[i] = pre[i - 1] * nums[i - 1]
-            
-        # Calculate suffix products
-        for i in range(n - 2, -1, -1):
-            suff[i] = suff[i + 1] * nums[i + 1]
-            
-        # Multiply prefix and suffix products to get the result
-        ans = [0] * n
-        for i in range(n):
-            ans[i] = pre[i] * suff[i]
-            
+                if i != j:
+                    ans[i] *= nums[j]
         return ans
 
-# Solution 3: (Using Left and Right Product Arrays) Complexity: O(n)
+# Solution 2: (Better Approach) Complexity: O(n)
 
 class Solution:
-    def productExceptSelf(self, nums: list[int]) -> list[int]:
+    def productExceptSelf(self, nums):
         n = len(nums)
-        ans = [0] * n
-        left_Product = [0] * n
-        right_Product = [0] * n
+        left = [1] * n
+        right = [1] * n
+        ans = [1] * n
         
-        left_Product[0] = 1
+        # Fill the left array
         for i in range(1, n):
-            left_Product[i] = left_Product[i-1] * nums[i-1]
+            left[i] = left[i - 1] * nums[i - 1]
             
-        right_Product[n-1] = 1
-        for i in range(n-2, -1, -1):
-            right_Product[i] = right_Product[i+1] * nums[i+1]
+        # Fill the right array
+        for i in range(n - 2, -1, -1):
+            right[i] = right[i + 1] * nums[i + 1]
             
+        # Construct the final answer
         for i in range(n):
-            ans[i] = left_Product[i] * right_Product[i]
+            ans[i] = left[i] * right[i]
+        
+        return ans
+
+# Solution 3: (Optimal Approach) Complexity: O(n)
+
+class Solution:
+    def productExceptSelf(self, nums):
+        n = len(nums)
+        ans = [1] * n
+        
+        # Pass 1: Calculate left products directly into ans
+        for i in range(1, n):
+            ans[i] = ans[i - 1] * nums[i - 1]
+            
+        # Pass 2: Calculate right products on the fly and multiply
+        right_product = 1
+        for i in range(n - 1, -1, -1):
+            ans[i] *= right_product
+            right_product *= nums[i]
             
         return ans
 
 if __name__ == "__main__":
-    print(Solution().productExceptSelf([1, 2, 3, 4]))  # [24, 12, 8, 6]
+    print(Solution().productExceptSelf([1, 2, 3, 4]))  # Output: [24, 12, 8, 6]
